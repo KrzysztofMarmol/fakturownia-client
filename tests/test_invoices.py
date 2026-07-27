@@ -38,6 +38,21 @@ def test_list_invoices_builds_params_and_auth_header(
     assert "number" not in params  # None filters are dropped
 
 
+def test_list_invoices_income_filter_maps_to_yes_no(
+    api: respx.MockRouter, client: FakturowniaClient
+) -> None:
+    route = api.get("/invoices.json").mock(return_value=httpx.Response(200, json=[]))
+
+    client.list_invoices(income=False)
+    assert dict(httpx.URL(str(route.calls.last.request.url)).params)["income"] == "no"
+
+    client.list_invoices(income=True)
+    assert dict(httpx.URL(str(route.calls.last.request.url)).params)["income"] == "yes"
+
+    client.list_invoices()
+    assert "income" not in dict(httpx.URL(str(route.calls.last.request.url)).params)
+
+
 def test_list_invoices_date_range_implies_period_more(
     api: respx.MockRouter, client: FakturowniaClient
 ) -> None:

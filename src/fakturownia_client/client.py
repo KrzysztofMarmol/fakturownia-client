@@ -84,12 +84,17 @@ class FakturowniaClient:
         client_id: int | None = None,
         number: str | None = None,
         kind: str | None = None,
+        income: bool | None = None,
         include_positions: bool = False,
         order: str | None = None,
         page: int = 1,
         per_page: int = 25,
     ) -> list[Invoice]:
-        """``GET /invoices.json``; ``date_from``/``date_to`` imply ``period="more"``."""
+        """``GET /invoices.json``; ``date_from``/``date_to`` imply ``period="more"``.
+
+        ``income``: None (default) lists sales invoices, ``False`` lists
+        cost/expense invoices (``income=no``), ``True`` forces sales explicitly.
+        """
         return self._execute(
             _ops.list_invoices(
                 period=period,
@@ -98,6 +103,7 @@ class FakturowniaClient:
                 client_id=client_id,
                 number=number,
                 kind=kind,
+                income=income,
                 include_positions=include_positions,
                 order=order,
                 page=page,
