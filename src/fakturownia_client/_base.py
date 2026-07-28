@@ -14,11 +14,17 @@ USER_AGENT = f"fakturownia-client/{__version__}"
 
 
 def normalize_domain(domain: str) -> str:
-    """Accept ``"firma"``, ``"firma.fakturownia.pl"`` or a full URL; return the host."""
+    """Return the API host for an account name, full domain or URL.
+
+    A bare account name (``"firma"``) gets the default ``.fakturownia.pl``
+    suffix. Anything containing a dot is treated as a complete host, so
+    InvoiceOcean and other regional domains work as-is
+    (``"mycompany.invoiceocean.com"``, ``"firma.fakturownia.pl"``, full URLs).
+    """
     host = domain.strip().removeprefix("https://").removeprefix("http://").split("/")[0]
     if not host:
         raise ValueError("Fakturownia domain must not be empty")
-    if not host.endswith(_SUFFIX):
+    if "." not in host:
         host += _SUFFIX
     return host
 

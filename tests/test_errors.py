@@ -78,6 +78,18 @@ def test_normalize_domain_variants(raw: str) -> None:
     assert normalize_domain(raw) == "firma.fakturownia.pl"
 
 
+@pytest.mark.parametrize(
+    "raw",
+    [
+        "mycompany.invoiceocean.com",
+        "https://mycompany.invoiceocean.com",
+        "mycompany.invoiceocean.com/api",
+    ],
+)
+def test_normalize_domain_keeps_invoiceocean_hosts(raw: str) -> None:
+    assert normalize_domain(raw) == "mycompany.invoiceocean.com"
+
+
 def test_normalize_domain_rejects_empty() -> None:
     with pytest.raises(ValueError):
         normalize_domain("https://")
