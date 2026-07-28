@@ -11,7 +11,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 InvoiceStatus = Literal["issued", "sent", "paid", "partial", "rejected"]
 InvoiceKind = Literal[
@@ -21,6 +21,11 @@ InvoiceKind = Literal[
 
 class _ApiModel(BaseModel):
     model_config = ConfigDict(extra="allow")
+
+
+def _blank_to_none(value: object) -> object:
+    """Fakturownia returns "" for unset dates; treat it as absent."""
+    return None if value == "" else value
 
 
 class InvoicePosition(_ApiModel):
@@ -59,6 +64,16 @@ class Invoice(_ApiModel):
     positions: list[InvoicePosition] | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
+
+    _blank_dates = field_validator(
+        "issue_date",
+        "sell_date",
+        "payment_to",
+        "paid_date",
+        "created_at",
+        "updated_at",
+        mode="before",
+    )(_blank_to_none)
 
 
 class InvoicePositionCreate(_ApiModel):
@@ -101,6 +116,8 @@ class Client(_ApiModel):
     created_at: datetime | None = None
     updated_at: datetime | None = None
 
+    _blank_dates = field_validator("created_at", "updated_at", mode="before")(_blank_to_none)
+
 
 class Product(_ApiModel):
     id: int
@@ -114,3 +131,5 @@ class Product(_ApiModel):
     quantity: float | str | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
+
+    _blank_dates = field_validator("created_at", "updated_at", mode="before")(_blank_to_none)

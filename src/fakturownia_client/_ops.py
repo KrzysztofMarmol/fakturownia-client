@@ -11,6 +11,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any, Generic, TypeVar
 
+from .exceptions import FakturowniaError
 from .models import Client, Invoice, InvoiceCreate, InvoiceStatus, Product
 
 T = TypeVar("T")
@@ -55,6 +56,15 @@ def _none(data: Any) -> None:
 
 
 def _passthrough(data: Any) -> Any:
+    return data
+
+
+def _checked_envelope(data: Any) -> Any:
+    """Some endpoints answer 200 with {"code": "error", ...} — surface that."""
+    if isinstance(data, dict) and data.get("code") not in (None, "success"):
+        raise FakturowniaError(
+            f"API returned an error envelope: {data.get('message', data)}", status_code=200
+        )
     return data
 
 
@@ -126,7 +136,7 @@ def change_invoice_status(invoice_id: int, status: InvoiceStatus) -> Op[Any]:
     return Op(
         "POST",
         f"/invoices/{invoice_id}/change_status.json",
-        _passthrough,
+        _checked_envelope,
         params={"status": status},
     )
 

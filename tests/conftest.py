@@ -17,5 +17,5 @@ def api() -> Iterator[respx.MockRouter]:
 
 @pytest.fixture
 def client(api: respx.MockRouter) -> Iterator[FakturowniaClient]:
-    with FakturowniaClient("testfirma", TOKEN) as fk:
+    with FakturowniaClient("testfirma", TOKEN, max_retries=0) as fk:
         yield fk
