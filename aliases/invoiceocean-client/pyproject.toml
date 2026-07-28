@@ -1,0 +1,30 @@
+[project]
+name = "invoiceocean-client"
+version = "0.1.1"
+description = "Python client for the InvoiceOcean REST API (alias for fakturownia-client)"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Krzysztof Marmol", email = "krzysztof.marmol@gmail.com" },
+]
+license = "MIT"
+keywords = ["invoiceocean", "fakturownia", "invoices", "api", "client"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Topic :: Office/Business :: Financial :: Accounting",
+    "Typing :: Typed",
+]
+# Pinned exactly: this alias always mirrors one fakturownia-client release.
+dependencies = ["fakturownia-client==0.1.1"]
+
+[project.urls]
+Repository = "https://github.com/KrzysztofMarmol/fakturownia-client"
+
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -66,6 +66,14 @@ async with AsyncFakturowniaClient("mycompany", api_token="...") as fk:
 ```
 
 `domain` accepts `"mycompany"`, `"mycompany.fakturownia.pl"` or a full URL.
+
+### InvoiceOcean
+
+InvoiceOcean is the international brand of Fakturownia — same API. Pass your
+full domain: `FakturowniaClient("mycompany.invoiceocean.com", api_token=...)`.
+There is also an official alias package,
+[`invoiceocean-client`](https://pypi.org/project/invoiceocean-client/), which
+re-exports this API as `InvoiceOceanClient` / `AsyncInvoiceOceanClient`.
 Errors raise typed exceptions: `AuthenticationError`, `NotFoundError`,
 `ValidationError`, `RateLimitError`, `ServerError` (all subclass `FakturowniaError`).
 

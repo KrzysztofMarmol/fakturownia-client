@@ -3,6 +3,19 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/), versioning: SemVer.
 
+## [0.1.1] - 2026-07-28
+
+### Fixed
+- `normalize_domain` no longer mangles non-default hosts: anything containing
+  a dot is used as-is, so InvoiceOcean and regional domains work
+  (`mycompany.invoiceocean.com`). Previously `.fakturownia.pl` was appended
+  to every host.
+
+### Added
+- Official alias package [`invoiceocean-client`](https://pypi.org/project/invoiceocean-client/)
+  (re-exports the full API with `InvoiceOceanClient`/`AsyncInvoiceOceanClient`
+  aliases), published in lockstep from this repository.
+
 ## [0.1.0] - 2026-07-28
 
 ### Added

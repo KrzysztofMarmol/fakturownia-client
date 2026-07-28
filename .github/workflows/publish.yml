@@ -22,7 +22,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
+      - name: Check alias version matches
+        run: |
+          python3 - <<'EOF'
+          import re, sys, tomllib
+          main = re.search(r'"(.+)"', open("src/fakturownia_client/_version.py").read()).group(1)
+          with open("aliases/invoiceocean-client/pyproject.toml", "rb") as f:
+              alias = tomllib.load(f)["project"]
+          assert alias["version"] == main, f"alias {alias['version']} != client {main}"
+          assert f"fakturownia-client=={main}" in alias["dependencies"], alias["dependencies"]
+          print(f"versions in sync: {main}")
+          EOF
       - run: uv build
+      - run: uv build aliases/invoiceocean-client -o dist
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
