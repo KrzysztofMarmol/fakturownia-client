@@ -14,7 +14,7 @@ from tests.conftest import TOKEN
 
 @pytest.fixture
 async def aclient(api: respx.MockRouter) -> AsyncFakturowniaClient:
-    async with AsyncFakturowniaClient("testfirma", TOKEN) as fk:
+    async with AsyncFakturowniaClient("testfirma", TOKEN, max_retries=0) as fk:
         yield fk
 
 

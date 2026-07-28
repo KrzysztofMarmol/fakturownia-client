@@ -1,5 +1,10 @@
 # fakturownia-client
 
+[![PyPI](https://img.shields.io/pypi/v/fakturownia-client)](https://pypi.org/project/fakturownia-client/)
+[![CI](https://github.com/KrzysztofMarmol/fakturownia-client/actions/workflows/ci.yml/badge.svg)](https://github.com/KrzysztofMarmol/fakturownia-client/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/pypi/pyversions/fakturownia-client)](https://pypi.org/project/fakturownia-client/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 Python client for the [Fakturownia](https://fakturownia.pl) (InvoiceOcean) REST API.
 Covers invoices (list/search, create/update, status changes, PDF download),
 clients (CRUD) and products.

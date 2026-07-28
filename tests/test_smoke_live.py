@@ -38,3 +38,14 @@ def test_list_clients(fk: FakturowniaClient) -> None:
 
 def test_list_products(fk: FakturowniaClient) -> None:
     assert isinstance(fk.list_products(per_page=1), list)
+
+
+def test_list_cost_invoices(fk: FakturowniaClient) -> None:
+    assert isinstance(fk.list_invoices(income=False, per_page=1), list)
+
+
+def test_pdf_signature(fk: FakturowniaClient) -> None:
+    invoices = fk.list_invoices(period="all", per_page=1)
+    if not invoices:
+        pytest.skip("no invoices on this account")
+    assert fk.download_invoice_pdf(invoices[0].id).startswith(b"%PDF")

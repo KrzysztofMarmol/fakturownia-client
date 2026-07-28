@@ -1,13 +1,18 @@
 """Python client for the Fakturownia (InvoiceOcean) REST API."""
 
+from ._retry import RetryPolicy
+from ._version import __version__
 from .async_client import AsyncFakturowniaClient
 from .client import FakturowniaClient, normalize_domain
 from .exceptions import (
     AuthenticationError,
+    BadRequestError,
     FakturowniaError,
     NotFoundError,
     RateLimitError,
+    ResponseParseError,
     ServerError,
+    TransportError,
     ValidationError,
 )
 from .models import (
@@ -21,11 +26,10 @@ from .models import (
     Product,
 )
 
-__version__ = "0.0.1"
-
 __all__ = [
     "AsyncFakturowniaClient",
     "AuthenticationError",
+    "BadRequestError",
     "Client",
     "FakturowniaClient",
     "FakturowniaError",
@@ -38,7 +42,10 @@ __all__ = [
     "NotFoundError",
     "Product",
     "RateLimitError",
+    "ResponseParseError",
+    "RetryPolicy",
     "ServerError",
+    "TransportError",
     "ValidationError",
     "__version__",
     "normalize_domain",
