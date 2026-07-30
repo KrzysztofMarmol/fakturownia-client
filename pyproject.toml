@@ -1,7 +1,7 @@
 [project]
 name = "fakturownia-client"
 dynamic = ["version"]
-description = "Python client for the Fakturownia (InvoiceOcean) REST API"
+description = "Unofficial Python client for the Fakturownia (InvoiceOcean) REST API"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [

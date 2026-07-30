@@ -3,6 +3,14 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/), versioning: SemVer.
 
+## [0.1.2] - 2026-07-28
+
+### Changed
+- Made the unofficial status explicit everywhere (README, package
+  descriptions, alias): this project is not affiliated with or endorsed by
+  Fakturownia sp. z o.o. / InvoiceOcean; trademarks are used only to
+  indicate compatibility.
+
 ## [0.1.1] - 2026-07-28
 
 ### Fixed
@@ -12,7 +20,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/), versioning: SemVer.
   to every host.
 
 ### Added
-- Official alias package [`invoiceocean-client`](https://pypi.org/project/invoiceocean-client/)
+- Companion (unofficial) alias package [`invoiceocean-client`](https://pypi.org/project/invoiceocean-client/)
   (re-exports the full API with `InvoiceOceanClient`/`AsyncInvoiceOceanClient`
   aliases), published in lockstep from this repository.
 

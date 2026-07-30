@@ -5,9 +5,14 @@
 [![Python](https://img.shields.io/pypi/pyversions/fakturownia-client)](https://pypi.org/project/fakturownia-client/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Python client for the [Fakturownia](https://fakturownia.pl) (InvoiceOcean) REST API.
-Covers invoices (list/search, create/update, status changes, PDF download),
-clients (CRUD) and products.
+**Unofficial** Python client for the [Fakturownia](https://fakturownia.pl)
+(InvoiceOcean) REST API. Covers invoices (list/search, create/update, status
+changes, PDF download), clients (CRUD) and products.
+
+> This is a community-maintained project. It is not affiliated with, endorsed
+> by, or sponsored by Fakturownia sp. z o.o. or InvoiceOcean. "Fakturownia"
+> and "InvoiceOcean" are trademarks of their respective owner, used here only
+> to indicate compatibility.
 
 ## Security note: token in header, never in URL
 
@@ -71,9 +76,10 @@ async with AsyncFakturowniaClient("mycompany", api_token="...") as fk:
 
 InvoiceOcean is the international brand of Fakturownia — same API. Pass your
 full domain: `FakturowniaClient("mycompany.invoiceocean.com", api_token=...)`.
-There is also an official alias package,
+This repository also publishes a companion alias package,
 [`invoiceocean-client`](https://pypi.org/project/invoiceocean-client/), which
-re-exports this API as `InvoiceOceanClient` / `AsyncInvoiceOceanClient`.
+re-exports this API as `InvoiceOceanClient` / `AsyncInvoiceOceanClient`
+(equally unofficial).
 Errors raise typed exceptions: `AuthenticationError`, `NotFoundError`,
 `ValidationError`, `RateLimitError`, `ServerError` (all subclass `FakturowniaError`).
 

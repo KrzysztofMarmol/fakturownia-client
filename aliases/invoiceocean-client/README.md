@@ -1,8 +1,14 @@
 # invoiceocean-client
 
-Python client for the [InvoiceOcean](https://invoiceocean.com) REST API.
+**Unofficial** Python client for the [InvoiceOcean](https://invoiceocean.com)
+REST API.
 
-This is an **official alias** for
+> This is a community-maintained project. It is not affiliated with, endorsed
+> by, or sponsored by InvoiceOcean or Fakturownia sp. z o.o. "InvoiceOcean"
+> and "Fakturownia" are trademarks of their respective owner, used here only
+> to indicate compatibility.
+
+This package is an alias for
 [`fakturownia-client`](https://pypi.org/project/fakturownia-client/) —
 InvoiceOcean is the international brand of Fakturownia and both run the same
 API. The alias pins the exact matching release and re-exports the full API
