@@ -72,10 +72,19 @@ async with AsyncFakturowniaClient("mycompany", api_token="...") as fk:
 
 `domain` accepts `"mycompany"`, `"mycompany.fakturownia.pl"` or a full URL.
 
-### InvoiceOcean
+### Compatible platforms (InvoiceOcean, VosFactures, BitFactura)
 
-InvoiceOcean is the international brand of Fakturownia — same API. Pass your
-full domain: `FakturowniaClient("mycompany.invoiceocean.com", api_token=...)`.
+Fakturownia runs the same API under several regional brands — this client
+works with all of them; pass your full account domain:
+
+| Platform | Region | Example `domain` |
+|---|---|---|
+| fakturownia.pl | Poland | `mycompany` or `mycompany.fakturownia.pl` |
+| invoiceocean.com | Global / USA | `mycompany.invoiceocean.com` |
+| invoiceocean.de | Germany | `mycompany.invoiceocean.de` |
+| vosfactures.fr | France | `mycompany.vosfactures.fr` |
+| bitfactura.es | Spain | `mycompany.bitfactura.es` |
+
 This repository also publishes a companion alias package,
 [`invoiceocean-client`](https://pypi.org/project/invoiceocean-client/), which
 re-exports this API as `InvoiceOceanClient` / `AsyncInvoiceOceanClient`

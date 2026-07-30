@@ -3,6 +3,13 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/), versioning: SemVer.
 
+## [0.1.3] - 2026-07-30
+
+### Added
+- "Compatible platforms" documentation and keywords: fakturownia.pl,
+  invoiceocean.com, invoiceocean.de, vosfactures.fr, bitfactura.es (regional
+  brands of the same API — pass the full account domain).
+
 ## [0.1.2] - 2026-07-28
 
 ### Changed
