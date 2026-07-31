@@ -19,6 +19,9 @@ jobs:
   publish:
     needs: test
     runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write  # PyPI trusted publishing (OIDC), no API token involved
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
@@ -36,5 +39,3 @@ jobs:
       - run: uv build
       - run: uv build aliases/invoiceocean-client -o dist
       - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
