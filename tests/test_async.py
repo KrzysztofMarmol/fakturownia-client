@@ -65,7 +65,7 @@ async def test_async_payments_roundtrip(
 ) -> None:
     payment_json = {"id": 77, "name": "Payment 001", "price": "100.0", "paid": True}
     api.get("/banking/payments.json").mock(return_value=httpx.Response(200, json=[payment_json]))
-    api.get("/banking/payment/77.json").mock(return_value=httpx.Response(200, json=payment_json))
+    api.get("/banking/payments/77.json").mock(return_value=httpx.Response(200, json=payment_json))
     create = api.post("/banking/payments.json").mock(
         return_value=httpx.Response(201, json=payment_json)
     )

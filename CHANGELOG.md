@@ -3,6 +3,15 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/), versioning: SemVer.
 
+## [0.2.1] - 2026-07-31
+
+### Fixed
+- `get_payment` now uses `/banking/payments/{id}.json` (plural). The official
+  docs show a singular path, but the live API returns 404 for it (verified
+  against a real account).
+- `Payment.paid_date` is a full `datetime` — the API returns a timestamp, not
+  a date, which previously failed model validation.
+
 ## [0.2.0] - 2026-07-31
 
 ### Added

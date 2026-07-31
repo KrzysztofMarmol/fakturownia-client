@@ -134,7 +134,7 @@ class Payment(_ApiModel):
     invoice_id: int | None = None
     client_id: int | None = None
     description: str | None = None
-    paid_date: date | None = None
+    paid_date: datetime | None = None  # full timestamp on the live API, not a date
     created_at: datetime | None = None
     updated_at: datetime | None = None
     invoices: list[Invoice] | None = None

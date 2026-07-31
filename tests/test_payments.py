@@ -46,12 +46,26 @@ def test_list_payments_include_invoices(api: respx.MockRouter, client: Fakturown
     assert payment.invoices[0].number == "2026/07/01"
 
 
-def test_get_payment_uses_singular_documented_path(
+def test_get_payment_uses_plural_path_docs_are_wrong(
     api: respx.MockRouter, client: FakturowniaClient
 ) -> None:
-    api.get("/banking/payment/77.json").mock(return_value=httpx.Response(200, json=PAYMENT_JSON))
+    # Official docs show /banking/payment/{id}.json (singular) but the live API
+    # 404s on it; only the plural path works — do not "fix" this back.
+    api.get("/banking/payments/77.json").mock(return_value=httpx.Response(200, json=PAYMENT_JSON))
 
     assert client.get_payment(77).id == 77
+
+
+def test_payment_paid_date_accepts_full_timestamp(
+    api: respx.MockRouter, client: FakturowniaClient
+) -> None:
+    record = dict(PAYMENT_JSON, paid_date="2026-07-31T15:55:57.000+02:00")
+    api.get("/banking/payments.json").mock(return_value=httpx.Response(200, json=[record]))
+
+    (payment,) = client.list_payments()
+
+    assert payment.paid_date is not None
+    assert payment.paid_date.year == 2026
 
 
 def test_create_payment_wraps_banking_payment_and_keeps_token_out_of_body(

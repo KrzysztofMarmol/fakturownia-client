@@ -245,9 +245,9 @@ def list_payments(
 
 
 def get_payment(payment_id: int) -> Op[Payment]:
-    # The documented show path really is singular (/banking/payment/{id}.json),
-    # unlike every other endpoint in this API.
-    return Op("GET", f"/banking/payment/{payment_id}.json", _payment)
+    # Official docs show a singular path (/banking/payment/{id}.json) but that
+    # 404s on the live API; only the plural form works (verified 2026-07-31).
+    return Op("GET", f"/banking/payments/{payment_id}.json", _payment)
 
 
 def create_payment(payment: dict[str, Any]) -> Op[Payment]:
