@@ -119,6 +119,31 @@ class Client(_ApiModel):
     _blank_dates = field_validator("created_at", "updated_at", mode="before")(_blank_to_none)
 
 
+class Payment(_ApiModel):
+    """A banking payment (``/banking/payments``), optionally linked to invoices.
+
+    ``invoices`` is populated only when listing with ``include=invoices``.
+    """
+
+    id: int
+    name: str | None = None
+    price: str | float | None = None
+    currency: str | None = None
+    paid: bool | None = None
+    kind: str | None = None
+    invoice_id: int | None = None
+    client_id: int | None = None
+    description: str | None = None
+    paid_date: date | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+    invoices: list[Invoice] | None = None
+
+    _blank_dates = field_validator("paid_date", "created_at", "updated_at", mode="before")(
+        _blank_to_none
+    )
+
+
 class Product(_ApiModel):
     id: int
     name: str | None = None

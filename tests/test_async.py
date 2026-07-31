@@ -60,6 +60,58 @@ async def test_async_iter_invoices_paginates(
     assert route.call_count == 2
 
 
+async def test_async_payments_roundtrip(
+    api: respx.MockRouter, aclient: AsyncFakturowniaClient
+) -> None:
+    payment_json = {"id": 77, "name": "Payment 001", "price": "100.0", "paid": True}
+    api.get("/banking/payments.json").mock(return_value=httpx.Response(200, json=[payment_json]))
+    api.get("/banking/payment/77.json").mock(return_value=httpx.Response(200, json=payment_json))
+    create = api.post("/banking/payments.json").mock(
+        return_value=httpx.Response(201, json=payment_json)
+    )
+    update = api.patch("/banking/payments/77.json").mock(
+        return_value=httpx.Response(200, json=payment_json)
+    )
+    delete = api.delete("/banking/payments/77.json").mock(return_value=httpx.Response(200))
+
+    assert (await aclient.list_payments())[0].id == 77
+    assert (await aclient.get_payment(77)).name == "Payment 001"
+    await aclient.create_payment({"name": "Payment 001", "price": 100.0, "invoice_id": 555})
+    await aclient.update_payment(77, {"paid": False})
+    await aclient.delete_payment(77)
+
+    assert json.loads(create.calls.last.request.content) == {
+        "banking_payment": {"name": "Payment 001", "price": 100.0, "invoice_id": 555}
+    }
+    assert json.loads(update.calls.last.request.content) == {"banking_payment": {"paid": False}}
+    assert delete.called
+
+
+async def test_async_iter_payments_paginates(
+    api: respx.MockRouter, aclient: AsyncFakturowniaClient
+) -> None:
+    api.get("/banking/payments.json").mock(
+        side_effect=[
+            httpx.Response(200, json=[{"id": i} for i in range(100)]),
+            httpx.Response(200, json=[{"id": 100}]),
+        ]
+    )
+
+    assert len([p async for p in aclient.iter_payments()]) == 101
+
+
+async def test_async_send_invoice_by_email(
+    api: respx.MockRouter, aclient: AsyncFakturowniaClient
+) -> None:
+    route = api.post("/invoices/1/send_by_email.json").mock(
+        return_value=httpx.Response(200, json={"code": "success"})
+    )
+
+    await aclient.send_invoice_by_email(1, email_to="a@acme.pl")
+
+    assert dict(httpx.URL(str(route.calls.last.request.url)).params)["email_to"] == "a@acme.pl"
+
+
 async def test_async_error_mapping(api: respx.MockRouter, aclient: AsyncFakturowniaClient) -> None:
     api.get("/invoices/1.json").mock(
         return_value=httpx.Response(404, json={"code": "error", "message": "nope"})

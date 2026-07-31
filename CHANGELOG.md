@@ -3,6 +3,20 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/), versioning: SemVer.
 
+## [0.2.0] - 2026-07-31
+
+### Added
+- Payments (banking) support in both clients: `list_payments`
+  (`include_invoices=True` embeds linked invoices), `get_payment`,
+  `create_payment` (link via `invoice_id` or `invoice_ids`, settled in array
+  order), `update_payment`, `delete_payment`, plus `iter_payments` /
+  `aiter_payments` pagination and the `Payment` model.
+- `send_invoice_by_email` on both clients: e-mails an invoice to its buyer or
+  to explicit recipients (`email_to` accepts a list or a comma-separated
+  string; the API caps it at 5 addresses), with `email_cc`, `email_pdf`,
+  `print_option` (`original`/`copy`/`original_and_copy`/`duplicate`) and
+  `update_buyer_email`. Rejects the API's `200 + {"code": "error"}` envelope.
+
 ## [0.1.3] - 2026-07-30
 
 ### Added

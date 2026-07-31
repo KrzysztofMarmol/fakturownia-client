@@ -23,6 +23,7 @@ from .models import (
     InvoicePosition,
     InvoicePositionCreate,
     InvoiceStatus,
+    Payment,
     Product,
 )
 
@@ -40,6 +41,7 @@ __all__ = [
     "InvoicePositionCreate",
     "InvoiceStatus",
     "NotFoundError",
+    "Payment",
     "Product",
     "RateLimitError",
     "ResponseParseError",

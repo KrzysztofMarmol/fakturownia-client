@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Sequence
 from types import TracebackType
 from typing import Any, TypeVar
 
@@ -21,7 +21,7 @@ from ._base import DEFAULT_TIMEOUT, Timeout, auth_headers, base_url
 from ._retry import RetryPolicy
 from .client import _check_pdf, _parse
 from .exceptions import TransportError, _retry_after_seconds, raise_for_status
-from .models import Client, Invoice, InvoiceCreate, InvoiceStatus, Product
+from .models import Client, Invoice, InvoiceCreate, InvoiceStatus, Payment, Product
 from .pagination import MAX_PER_PAGE, aiter_pages
 
 __all__ = ["AsyncFakturowniaClient"]
@@ -186,6 +186,33 @@ class AsyncFakturowniaClient:
         _check_pdf(content)
         return content
 
+    async def send_invoice_by_email(
+        self,
+        invoice_id: int,
+        *,
+        email_to: str | Sequence[str] | None = None,
+        email_cc: str | Sequence[str] | None = None,
+        email_pdf: bool | None = None,
+        print_option: str | None = None,
+        update_buyer_email: bool | None = None,
+    ) -> Any:
+        """E-mail the invoice to its buyer (or to ``email_to`` — max 5 addresses).
+
+        ``print_option``: ``original`` / ``copy`` / ``original_and_copy`` /
+        ``duplicate``. Raises :class:`FakturowniaError` on the API's
+        ``200 + {"code": "error"}`` envelope.
+        """
+        return await self._execute(
+            _ops.send_invoice_by_email(
+                invoice_id,
+                email_to=email_to,
+                email_cc=email_cc,
+                email_pdf=email_pdf,
+                print_option=print_option,
+                update_buyer_email=update_buyer_email,
+            )
+        )
+
     # -- clients ---------------------------------------------------------------
 
     async def list_clients(
@@ -229,6 +256,38 @@ class AsyncFakturowniaClient:
 
     async def delete_client(self, client_id: int) -> None:
         await self._execute(_ops.delete_client(client_id))
+
+    # -- payments (banking) -------------------------------------------------------
+
+    async def list_payments(
+        self, *, page: int = 1, per_page: int = 25, include_invoices: bool = False
+    ) -> list[Payment]:
+        """``GET /banking/payments.json``; ``include_invoices`` embeds linked invoices."""
+        return await self._execute(
+            _ops.list_payments(page=page, per_page=per_page, include_invoices=include_invoices)
+        )
+
+    def iter_payments(self, **filters: Any) -> AsyncIterator[Payment]:
+        filters.pop("page", None)
+        filters.pop("per_page", None)
+
+        async def fetch(page: int) -> list[Payment]:
+            return await self.list_payments(page=page, per_page=MAX_PER_PAGE, **filters)
+
+        return aiter_pages(fetch)
+
+    async def get_payment(self, payment_id: int) -> Payment:
+        return await self._execute(_ops.get_payment(payment_id))
+
+    async def create_payment(self, payment: dict[str, Any]) -> Payment:
+        """Record a payment; link it via ``invoice_id`` or ``invoice_ids`` (settled in order)."""
+        return await self._execute(_ops.create_payment(payment))
+
+    async def update_payment(self, payment_id: int, fields: dict[str, Any]) -> Payment:
+        return await self._execute(_ops.update_payment(payment_id, fields))
+
+    async def delete_payment(self, payment_id: int) -> None:
+        await self._execute(_ops.delete_payment(payment_id))
 
     # -- products ----------------------------------------------------------------
 

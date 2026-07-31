@@ -52,6 +52,13 @@ with FakturowniaClient("mycompany", api_token="...") as fk:
     fk.change_invoice_status(created.id, "paid")
     pdf = fk.download_invoice_pdf(created.id)
 
+    # e-mail the invoice to the buyer (or explicit recipients, max 5)
+    fk.send_invoice_by_email(created.id, email_to="client@acme.pl", email_pdf=True)
+
+    # payments (banking): record money against invoices
+    fk.create_payment({"name": "Transfer 001", "price": 123.00, "invoice_id": created.id})
+    payments = fk.list_payments(include_invoices=True)
+
     # clients / products
     clients = fk.list_clients(tax_no="1234567890")
     products = fk.list_products()

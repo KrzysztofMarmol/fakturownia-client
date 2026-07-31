@@ -44,6 +44,17 @@ def test_list_cost_invoices(fk: FakturowniaClient) -> None:
     assert isinstance(fk.list_invoices(income=False, per_page=1), list)
 
 
+def test_list_payments(fk: FakturowniaClient) -> None:
+    assert isinstance(fk.list_payments(per_page=1), list)
+
+
+def test_get_payment_singular_path(fk: FakturowniaClient) -> None:
+    payments = fk.list_payments(per_page=1)
+    if not payments:
+        pytest.skip("no payments on this account")
+    assert fk.get_payment(payments[0].id).id == payments[0].id
+
+
 def test_pdf_signature(fk: FakturowniaClient) -> None:
     invoices = fk.list_invoices(period="all", per_page=1)
     if not invoices:
